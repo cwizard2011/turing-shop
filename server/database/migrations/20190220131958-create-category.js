@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Categories', {
-    category_id: {
+    id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -18,10 +18,16 @@ module.exports = {
       allowNull: false,
       references: {
         model: 'Departments',
-        key: 'department_id',
+        key: 'id',
         as: 'department_id'
       }
     },
+    createdAt: {
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      type: Sequelize.DATE
+    }
   }),
   down: queryInterface => queryInterface.dropTable('Categories')
 };

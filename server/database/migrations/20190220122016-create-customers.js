@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Customers', {
-    customer_id: {
+    id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -59,10 +59,16 @@ module.exports = {
       defaultValue: 1,
       references: {
         model: 'ShippingRegions',
-        key: 'shipping_region_id',
+        key: 'id',
         as: 'shipping_region_id'
       }
     },
+    createdAt: {
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      type: Sequelize.DATE
+    }
   }),
   down: queryInterface => queryInterface.dropTable('Customers')
 };

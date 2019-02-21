@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Orders', {
-    order_id: {
+    id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -14,10 +14,6 @@ module.exports = {
       allowNull: false,
       defaultValue: 0.00
     },
-    created_on: {
-      type: Sequelize.DATE,
-      allowNull: false
-    },
     shipped_on: Sequelize.DATE,
     status: {
       type: Sequelize.INTEGER,
@@ -28,7 +24,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       references: {
         model: 'Customers',
-        key: 'customer_id',
+        key: 'id',
         as: 'customer_id'
       }
     },
@@ -42,7 +38,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       references: {
         model: 'Shippings',
-        key: 'shipping_id',
+        key: 'id',
         as: 'shipping_id'
       }
     },
@@ -50,10 +46,16 @@ module.exports = {
       type: Sequelize.INTEGER,
       references: {
         model: 'Taxes',
-        key: 'tax_id',
+        key: 'id',
         as: 'tax_id'
       }
     },
+    createdAt: {
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      type: Sequelize.DATE
+    }
   }),
   down: queryInterface => queryInterface.dropTable('Orders')
 };

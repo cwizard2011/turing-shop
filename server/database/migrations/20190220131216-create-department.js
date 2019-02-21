@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Departments', {
-    department_id: {
+    id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -13,6 +13,12 @@ module.exports = {
     description: {
       type: Sequelize.TEXT
     },
+    createdAt: {
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      type: Sequelize.DATE
+    }
   }),
   down: queryInterface => queryInterface.dropTable('Departments')
 };

@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Products', {
-    product_id: {
+    id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -13,6 +13,15 @@ module.exports = {
     description: {
       type: Sequelize.STRING,
       allowNull: false
+    },
+    department_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Departments',
+        key: 'id',
+        as: 'department_id'
+      }
     },
     price: {
       type: Sequelize.DECIMAL,
@@ -35,6 +44,12 @@ module.exports = {
     display: {
       type: Sequelize.INTEGER
     },
+    createdAt: {
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      type: Sequelize.DATE
+    }
   }),
   down: queryInterface => queryInterface.dropTable('Products')
 };

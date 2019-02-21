@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0.00
     },
+    department_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     image: DataTypes.STRING,
     image_2: DataTypes.STRING,
     thumbnail: DataTypes.STRING,
@@ -31,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
     Product.belongsToMany(models.AttributeValue, {
       through: 'ProductAttribute',
       foreignKey: 'product_id'
+    });
+    Product.belongsTo(models.Department, {
+      foreignKey: 'department_id'
     });
   };
   return Product;

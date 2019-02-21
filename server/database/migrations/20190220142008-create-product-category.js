@@ -13,6 +13,12 @@ module.exports = {
     category_id: {
       type: Sequelize.INTEGER,
       allowNull: false
+    },
+    createdAt: {
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      type: Sequelize.DATE
     }
   }),
   down: queryInterface => queryInterface.dropTable('ProductCategories')

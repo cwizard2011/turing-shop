@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('ShoppingCarts', {
-    item_id: {
+    id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -11,11 +11,11 @@ module.exports = {
       allowNull: false,
       references: {
         model: 'Products',
-        key: 'product_id',
+        key: 'id',
         as: 'product_id'
       }
     },
-    attributes: {
+    attribute: {
       type: Sequelize.STRING(1234),
       allowNull: false
     },
@@ -31,6 +31,12 @@ module.exports = {
     added_on: {
       type: Sequelize.DATE,
       allowNull: false
+    },
+    createdAt: {
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      type: Sequelize.DATE
     }
   }),
   down: queryInterface => queryInterface.dropTable('ShoppingCarts')
