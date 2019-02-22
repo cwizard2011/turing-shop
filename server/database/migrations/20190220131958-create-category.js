@@ -7,11 +7,11 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     name: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(100),
       allowNull: false
     },
     description: {
-      type: Sequelize.TEXT
+      type: Sequelize.STRING(1000)
     },
     department_id: {
       type: Sequelize.INTEGER,

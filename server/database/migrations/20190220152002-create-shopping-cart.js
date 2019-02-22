@@ -15,8 +15,17 @@ module.exports = {
         as: 'product_id'
       }
     },
+    customer_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Customers',
+        key: 'id',
+        as: 'customer_id'
+      }
+    },
     attribute: {
-      type: Sequelize.STRING(1234),
+      type: Sequelize.STRING(1000),
       allowNull: false
     },
     quantity: {
@@ -27,10 +36,6 @@ module.exports = {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: true
-    },
-    added_on: {
-      type: Sequelize.DATE,
-      allowNull: false
     },
     createdAt: {
       type: Sequelize.DATE

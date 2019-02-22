@@ -5,6 +5,7 @@ const {
   Product,
   Category,
   Department,
+  AttributeValue
 } = db;
 
 /**
@@ -30,32 +31,56 @@ class ProductController {
     const queryBuilder = {
       attributes:
         {
-          exclude: ['product_id']
+          exclude: ['product_id', 'createdAt', 'updatedAt']
         },
+      include: [{
+        model: AttributeValue,
+        attributes: {
+          exclude: ['createdAt', 'updatedAt']
+        }
+      }],
       offset,
       limit
     };
 
     if (department) {
-      queryBuilder.include = {
-        model: Department,
-        where: {
-          name: {
-            [Op.iLike]: `%${req.query.department}%`
-          }
-        }
-      };
-      queryBuilder.include = {
-        model: Category,
-      };
+      Department.findAll({
+        include: [{
+          model: Category,
+          attributes: {
+            exclude: ['createdAt', 'updatedAt'],
+          },
+          include: [{
+            model: Product,
+            attributes: {
+              exclude: ['product_id', 'createdAt', 'updatedAt']
+            }
+          }]
+        }]
+      }).then((products) => {
+        const { count } = products;
+        const pageCount = Math.ceil(count / limit);
+        return res.status(200).json({
+          paginationMeta: {
+            currentPage: page,
+            pageSize: limit,
+            totalCount: count,
+            resultCount: products.rows.length,
+            pageCount
+          },
+          items: products.rows
+        });
+      }).catch(next);
     }
-
     if (category) {
       queryBuilder.include = {
         model: Category,
+        attributes: {
+          exclude: ['createdAt', 'updatedAt']
+        },
         where: {
           name: {
-            [Op.iLike]: `%${req.query.category}%`
+            [Op.like]: `%${req.query.category}%`
           }
         }
       };
@@ -63,13 +88,13 @@ class ProductController {
 
     if (search) {
       queryBuilder.where = {
-        [Op.or]: [{
+        $or: [{
           name: {
-            [Op.iLike]: `%${req.query.search}%`
+            [Op.like]: `%${req.query.search}%`
           }
         }, {
           description: {
-            [Op.iLike]: `%${req.query.search}`
+            [Op.like]: `%${req.query.search}%`
           }
         }]
       };
@@ -112,12 +137,18 @@ class ProductController {
     Product.findOne({
       attributes:
         {
-          exclude: ['product_id']
+          exclude: ['product_id', 'createdAt', 'updatedAt']
         },
       include: [{
-        model: Department
+        model: Category,
+        attributes: {
+          exclude: ['createdAt', 'updatedAt']
+        }
       }, {
-        model: Category
+        model: AttributeValue,
+        attributes: {
+          exclude: ['createdAt', 'updatedAt']
+        }
       }
       ],
       where: {

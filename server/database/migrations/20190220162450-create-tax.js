@@ -7,7 +7,7 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     tax_type: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(100),
       allowNull: false
     },
     tax_percentage: {

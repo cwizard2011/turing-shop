@@ -7,42 +7,35 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     name: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(100),
       allowNull: false
     },
     description: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(1000),
       allowNull: false
     },
-    department_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Departments',
-        key: 'id',
-        as: 'department_id'
-      }
-    },
     price: {
-      type: Sequelize.DECIMAL,
+      type: Sequelize.DECIMAL(10, 2),
       allowNull: false
     },
     discounted_price: {
-      type: Sequelize.DECIMAL,
+      type: Sequelize.DECIMAL(10, 2),
       allowNull: false,
       defaultValue: 0.00
     },
     image: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(150),
     },
     image_2: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING(150)
     },
     thumbnail: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING(150)
     },
     display: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER(6),
+      allowNull: false,
+      defaultValue: 0.00
     },
     createdAt: {
       type: Sequelize.DATE

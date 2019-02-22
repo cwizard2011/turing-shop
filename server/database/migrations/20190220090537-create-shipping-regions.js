@@ -6,7 +6,7 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    shipping_region: Sequelize.STRING,
+    shipping_region: Sequelize.STRING(100),
     createdAt: {
       type: Sequelize.DATE
     },

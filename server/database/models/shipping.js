@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Shipping = sequelize.define('Shipping', {
     shipping_type: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     shipping_cost: {

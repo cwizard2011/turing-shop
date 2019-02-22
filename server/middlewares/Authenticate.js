@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import db from '../database/models';
 
 dotenv.config();
-const { User } = db;
+const { Customer } = db;
 
 const secret = process.env.SECRET_KEY;
 
@@ -48,12 +48,12 @@ class Authenticate {
           message: 'You do not have permission to this page.'
         });
       }
-      User.findById(decoded.userId)
+      Customer.findById(decoded.customerId)
         .then((user) => {
           if (user) {
             req.decoded = {
               ...user.toAuthJSON(),
-              userId: decoded.userId,
+              customerId: decoded.customerId,
               role: decoded.role,
             };
             return next();

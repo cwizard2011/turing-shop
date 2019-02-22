@@ -7,7 +7,7 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     shipping_type: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(100),
       allowNull: false
     },
     shipping_cost: {

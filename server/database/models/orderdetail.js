@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     attribute: {
-      type: DataTypes.STRING(1234),
+      type: DataTypes.STRING(1000),
       allowNull: false
     },
     product_name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     quantity: {

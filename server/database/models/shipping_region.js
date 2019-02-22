@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const ShippingRegion = sequelize.define('ShippingRegion', {
     shipping_region: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   }, {});

@@ -7,7 +7,7 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     comments: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING(255)
     },
     total_amount: {
       type: Sequelize.DECIMAL(10, 2),
@@ -29,10 +29,10 @@ module.exports = {
       }
     },
     auth_code: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING(50)
     },
     reference: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING(50)
     },
     shipping_id: {
       type: Sequelize.INTEGER,

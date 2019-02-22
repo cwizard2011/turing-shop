@@ -1,10 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const Department = sequelize.define('Department', {
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
-    description: DataTypes.TEXT
+    description: DataTypes.STRING(1000)
 
   }, {});
   Department.associate = (models) => {

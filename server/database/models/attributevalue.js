@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const AttributeValue = sequelize.define('AttributeValue', {
     value: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     attribute_id: {

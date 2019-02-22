@@ -1,11 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
   const Product = sequelize.define('Product', {
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(1000),
       allowNull: false,
     },
     price: {
@@ -17,14 +17,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0.00
     },
-    department_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    image: DataTypes.STRING,
-    image_2: DataTypes.STRING,
-    thumbnail: DataTypes.STRING,
-    display: DataTypes.INTEGER
+    image: DataTypes.STRING(150),
+    image_2: DataTypes.STRING(150),
+    thumbnail: DataTypes.STRING(150),
+    display: {
+      type: DataTypes.INTEGER(6),
+      allowNull: false,
+      defaultValue: 0.00
+    }
   }, {});
 
   Product.associate = (models) => {
@@ -35,9 +35,6 @@ module.exports = (sequelize, DataTypes) => {
     Product.belongsToMany(models.AttributeValue, {
       through: 'ProductAttribute',
       foreignKey: 'product_id'
-    });
-    Product.belongsTo(models.Department, {
-      foreignKey: 'department_id'
     });
   };
   return Product;

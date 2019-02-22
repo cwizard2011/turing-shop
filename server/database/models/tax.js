@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Tax = sequelize.define('Tax', {
     tax_type: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     tax_percentage: {

@@ -20,11 +20,11 @@ module.exports = {
       allowNull: false,
     },
     attribute: {
-      type: Sequelize.STRING(1234),
+      type: Sequelize.STRING(1000),
       allowNull: false
     },
     product_name: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(100),
       allowNull: false
     },
     quantity: {

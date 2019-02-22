@@ -5,20 +5,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0.00
     },
-    created_on: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
     shipped_on: DataTypes.DATE,
     status: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
     },
-    comments: DataTypes.STRING,
+    comments: DataTypes.STRING(255),
     customer_id: DataTypes.INTEGER,
-    auth_code: DataTypes.STRING,
-    reference: DataTypes.STRING,
+    auth_code: DataTypes.STRING(50),
+    reference: DataTypes.STRING(50),
     shipping_id: DataTypes.INTEGER,
     tax_id: DataTypes.INTEGER,
   }, {});

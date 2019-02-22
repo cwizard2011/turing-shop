@@ -4,8 +4,11 @@ dotenv.config();
 
 const config = {
   development: {
-    use_env_variable: 'DATABASE_URL',
-    dialect: 'postgres'
+    username: 'root',
+    password: 'september1989',
+    database: 'ecommerce',
+    host: '127.0.0.1',
+    dialect: 'mysql'
   },
   test: {
     use_env_variable: 'TEST_DATABASE_URL',
