@@ -31,7 +31,7 @@ class ProductController {
     const queryBuilder = {
       attributes:
         {
-          exclude: ['product_id', 'createdAt', 'updatedAt']
+          exclude: ['createdAt', 'updatedAt']
         },
       include: [{
         model: AttributeValue,
@@ -47,13 +47,10 @@ class ProductController {
       Department.findAll({
         include: [{
           model: Category,
-          attributes: {
-            exclude: ['createdAt', 'updatedAt'],
-          },
           include: [{
             model: Product,
             attributes: {
-              exclude: ['product_id', 'createdAt', 'updatedAt']
+              exclude: ['createdAt', 'updatedAt']
             }
           }]
         }]
@@ -75,9 +72,6 @@ class ProductController {
     if (category) {
       queryBuilder.include = {
         model: Category,
-        attributes: {
-          exclude: ['createdAt', 'updatedAt']
-        },
         where: {
           name: {
             [Op.like]: `%${req.query.category}%`
@@ -134,10 +128,10 @@ class ProductController {
    */
   static getSingleItem(req, res, next) {
     const { id } = req.params;
-    Product.findOne({
+    Product.findByPk(id, {
       attributes:
         {
-          exclude: ['product_id', 'createdAt', 'updatedAt']
+          exclude: ['createdAt', 'updatedAt']
         },
       include: [{
         model: Category,
@@ -150,10 +144,7 @@ class ProductController {
           exclude: ['createdAt', 'updatedAt']
         }
       }
-      ],
-      where: {
-        id
-      }
+      ]
     }).then((product) => {
       if (!product) {
         return res.status(404).json({

@@ -1,10 +1,11 @@
-import { Op } from 'sequelize';
 import db from '../database/models';
+
 
 const {
   ShoppingCart,
   AttributeValue,
   Product,
+  Customer,
 } = db;
 
 /**
@@ -24,71 +25,147 @@ class ShoppingCartController {
       productId,
       attributes,
       quantity,
-      buyNow
     } = req.body.cart;
 
     const attributeArray = [];
-    try {
-      const attributesToString = attributes.toString();
-      ShoppingCart.findOne({
-        where: {
-          product_id: productId,
-          attribute: {
-            [Op.like]: `%${attributesToString}%`
-          }
+    attributes.forEach(value => AttributeValue.findOne({
+      where: {
+        value: {
+          $eq: value
         }
-      }).then((item) => {
-        if (item) {
-          res.status(400).json({
-            message: `This item has already been added to the cart,
-            go to cart and update the quantity`
-          });
-        }
-      }).catch(next);
-    } finally {
-      attributes.forEach(value => AttributeValue.find({
-        where: {
-          value: {
-            [Op.like]: value
-          }
-        }
-      }).then((attributeValue) => {
-        if (!attributeValue) {
-          res.status(404).json({
-            message: 'The attribute value provided does not exist'
-          });
-        }
-        attributeArray.push(attributeValue.dataValues.value);
-      }));
-      Product.findOne({
-        attributes:
+      }
+    }).then((attributeValue) => {
+      if (!attributeValue) {
+        return res.status(404).json({
+          message: 'The attribute value provided does not exist'
+        });
+      }
+      attributeArray.push(attributeValue.dataValues.value);
+    }));
+    Product.find({
+      attributes:
           {
-            exclude: ['product_id', 'createdAt', 'updatedAt']
+            exclude: ['createdAt', 'updatedAt']
           },
-        where: {
-          id: productId
+      where: {
+        id: productId
+      }
+    }).then((item) => {
+      if (!item) {
+        return res.status(404).json({
+          message: 'Item not found'
+        });
+      }
+      const attributeString = attributeArray.toString();
+      ShoppingCart.create({
+        product_id: productId,
+        customer_id: req.decoded.customerId,
+        attribute: attributeString,
+        quantity,
+      }).then(cart => res.status(201).json({
+        cart,
+        message: 'Item added to cart successfully'
+      })).catch(next);
+    }).catch(next);
+  }
+
+  /**
+   *
+   * @param {*} req request object
+   * @param {*} res response object
+   * @param {*} next
+   *
+   * @returns {object} Returns all items in the cart
+   */
+  static getAllCartItems(req, res, next) {
+    ShoppingCart.findAndCountAll({
+      include: [{
+        model: Product,
+        attributes: {
+          exclude: ['createdAt', 'updatedAt']
         }
-      }).then((item) => {
-        if (!item) {
-          res.status(404).json({
-            message: 'Item not found'
+      }, {
+        model: Customer
+      }],
+      where: {
+        customer_id: req.decoded.customerId
+      }
+    })
+      .then((items) => {
+        if (!items) {
+          return res.status(404).json({
+            message: 'No item in the cart at the moment'
           });
         }
-        const attributeString = attributeArray.toString();
-        ShoppingCart.create({
-          product_id: productId,
-          customer_id: req.decoded.customerId,
-          attribute: attributeString,
-          quantity,
-          buy_now: buyNow,
-        }).then((cart) => {
-          res.status(201).json({
-            cart,
-            message: 'Item added to cart successfully'
-          });
-        }).catch(next);
+        return res.status(200).json({
+          items
+        });
       }).catch(next);
-    }
+  }
+
+  /**
+   *
+   * @param {*} req request object
+   * @param {*} res response object
+   * @param {*} next call next function/handler
+   *
+   * @returns {object} Updated cart
+   */
+  static updateCartItem(req, res, next) {
+    const { cartId } = req.params;
+    const {
+      quantity
+    } = req.body.cart;
+
+    ShoppingCart.findOne({
+      where: {
+        id: cartId,
+        customer_id: req.decoded.customerId
+      }
+    }).then((item) => {
+      if (!item) {
+        return res.status(404).json({
+          message: 'Item not found in the cart'
+        });
+      }
+      item.update({
+        quantity: quantity || item.quantity
+      });
+      return res.status(200).json({
+        updatedItem: {
+          item
+        }
+      });
+    }).catch(next);
+  }
+
+  /**
+   *
+   * @param {*} req request object
+   * @param {*} res response object
+   * @param {*} next next function or middleware
+   *
+   * @return {object} deleted object
+   */
+  static deleteCartItem(req, res, next) {
+    const { cartId } = req.params;
+
+    ShoppingCart.findOne({
+      where: {
+        id: cartId,
+        customer_id: req.decoded.customerId,
+      }
+    }).then((item) => {
+      if (!item) {
+        return res.status(400).json({
+          message: 'Item not found in the cart'
+        });
+      }
+      item.destroy();
+      return res.status(200).json({
+        message: 'Item successfully deleted'
+      });
+    }).catch(next);
   }
 }
 

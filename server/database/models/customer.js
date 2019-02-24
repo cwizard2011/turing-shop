@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Customer.associate = (models) => {
-    Customer.hasOne(models.ShippingRegion, {
+    Customer.belongsTo(models.ShippingRegion, {
       foreignKey: 'shipping_region_id',
     });
   };
