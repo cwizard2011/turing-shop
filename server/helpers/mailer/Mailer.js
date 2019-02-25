@@ -4,7 +4,7 @@ import db from '../../database/models';
 const {
   ShoppingCart,
   Product,
-  Customer
+  Customer,
 } = db;
 
 
@@ -43,10 +43,11 @@ class Mailer {
   /**
    *
    * @param {*} customerId Id of the customer placing the order
-   *
+   * @param {*} shippingCost
+   * @param {*} shippingType
    * @returns {*} send order confirmation email
    */
-  static async sendOrderConfirmation(customerId) {
+  static async sendOrderConfirmation(customerId, shippingCost, shippingType) {
     ShoppingCart.findAll({
       include: [{
         model: Product
@@ -75,20 +76,32 @@ class Mailer {
         priceArray.push(parseFloat(item.Product.price));
         discountArray.push(parseFloat(item.Product.discounted_price));
       });
+      const orderTableColumn = response.reduce((a, b) => `${a}<tr>
+      <td style="border: 1px solid #ddd; padding: 8px;">${b.Product.name}</a></td>
+      <td style="border: 1px solid #ddd; padding: 8px;">${b.quantity}</td>
+      <td style="border: 1px solid #ddd; padding: 8px;">€ ${b.Product.price}</td></tr>`, '');
       const totalPrice = priceArray.reduce((prev, curr) => prev + curr);
       const totalDiscount = discountArray.reduce((prev, curr) => prev + curr);
-      const finalPrice = totalPrice - totalDiscount;
+      const finalPrice = Math.round(((totalPrice - totalDiscount) + shippingCost) * 100) / 100;
 
       const subject = 'Order confirmation';
       const message = `
-      <p>Dear ${name}, below is the summary of your order excluding shipping charges</p>
-
+      <p>Dear ${name}, below is the summary of your order including shipping charges</p>
+      <table style="border-collapse: collapse;">
+      <thead style="background-color: #6EB2FB; color:white">
+      <th style="border: 1px solid #ddd; padding: 8px;">Item Name</th>
+      <th style="border: 1px solid #ddd; padding: 8px;">Quantity</th>
+      <th style="border: 1px solid #ddd; padding: 8px;">Price</th>
+      </thead>
+      ${orderTableColumn}
+      </table>
+      <p><b>Shipping:</b> ${shippingType} <span><b>Cost:</b> $ ${shippingCost}</span></p>
       <p>
-      Total Price: ${totalPrice},
-      <span>Discount: ${totalDiscount}</span>,
-      <span>Final Charge: ${finalPrice}</span>
+      <b>Item Total:</b> ${totalPrice},
+      <span><b>Discount:</b> ${totalDiscount}</span>,
+      <span><b>Final Charge:</b> ${finalPrice}</span>
       </p>
-      <p>Shipping Address: ${address1}, ${city}, ${region}, ${country}, ${postalCode}</p>
+      <p><b>Shipping Address:</b> ${address1}, ${city}, ${region}, ${country}, ${postalCode}</p>
       `;
       Mailer.emailSender(email, subject, message);
     });

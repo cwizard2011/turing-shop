@@ -146,7 +146,7 @@ class UserInputValidation {
       address2: 'string|max:99',
       city: 'string|max:30',
       region: 'string|max:30',
-      postalCode: 'integer|positiveInt|min:5|max:6',
+      postalCode: 'string|min:5|max:6',
       country: 'string|min:3|max:30',
       dayPhone: 'integer|positiveInt|min:7|max:18',
       evePhone: 'integer|positiveInt|min:7|max:18',

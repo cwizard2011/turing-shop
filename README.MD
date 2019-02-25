@@ -166,3 +166,5 @@ Authentication required, returns an updated user object
 Authentication required, returns a user object
 
 
+## Running Test
+- Run the command `npm test` to run the test

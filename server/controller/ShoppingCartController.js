@@ -36,7 +36,7 @@ class ShoppingCartController {
       }
     }).then((attributeValue) => {
       if (!attributeValue) {
-        return res.status(404).json({
+        return res.status(400).json({
           message: 'The attribute value provided does not exist'
         });
       }

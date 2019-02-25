@@ -93,7 +93,7 @@ class AuthController {
           });
         }
         return res.status(400).json({
-          message: 'Username or password does not match.'
+          message: 'Email or password does not match.'
         });
       }
       return res.status(404).json({

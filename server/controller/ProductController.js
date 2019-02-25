@@ -54,20 +54,14 @@ class ProductController {
             }
           }]
         }]
-      }).then((products) => {
-        const { count } = products;
-        const pageCount = Math.ceil(count / limit);
-        return res.status(200).json({
-          paginationMeta: {
-            currentPage: page,
-            pageSize: limit,
-            totalCount: count,
-            resultCount: products.rows.length,
-            pageCount
-          },
-          items: products.rows
-        });
-      }).catch(next);
+      }).then(products => res.status(200).json({
+        paginationMeta: {
+          currentPage: page,
+          pageSize: limit,
+          resultCount: products.rows.length,
+        },
+        items: products.rows
+      })).catch(next);
     }
     if (category) {
       queryBuilder.include = {
@@ -102,15 +96,11 @@ class ProductController {
             message: 'No items at the moment'
           });
         }
-        const { count } = products;
-        const pageCount = Math.ceil(count / limit);
         return res.status(200).json({
           paginationMeta: {
             currentPage: page,
             pageSize: limit,
-            totalCount: count,
             resultCount: products.rows.length,
-            pageCount
           },
           items: products.rows
         });

@@ -6,9 +6,16 @@
   "scripts": {
     "start": "npm run build && node ./dist/index.js",
     "dev": "nodemon index.js --exec babel-node",
-    "migrations": "node_modules/.bin/sequelize db:migrate",
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "clean:build": "rimraf dist/",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha --require babel-core/register server/test/**/*.spec.js --exit && nyc report --timeout 10000",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "undo:migrations": "node_modules/.bin/sequelize db:migrate:undo:all",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrations": "node_modules/.bin/sequelize db:migrate",
+    "undo:seeders": "node_modules/.bin/sequelize db:seed:undo:all",
+    "seeders": "babel-node node_modules/.bin/sequelize db:seed:all",
+    "pretest": "cross-env NODE_ENV=test npm run undo:migrations && cross-env NODE_ENV=test npm run migrations && cross-env NODE_ENV=test npm run seeders",
+    "heroku-postbuild": "npm run migrations"
   },
   "keywords": [
     "ecommerce"
@@ -34,6 +41,7 @@
     "nodemailer": "^5.1.1",
     "pg": "^7.8.1",
     "pg-hstore": "^2.3.2",
+    "rimraf": "^2.6.3",
     "sequelize": "^4.42.0",
     "sequelize-cli": "^5.4.0",
     "stripe": "^6.25.1",
