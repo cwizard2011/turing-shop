@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     ShippingRegion.belongsTo(models.Customer, {
       foreignKey: 'shipping_region_id',
     });
+    ShippingRegion.hasMany(models.Shipping, {
+      foreignKey: 'shipping_region_id',
+    });
   };
   return ShippingRegion;
 };

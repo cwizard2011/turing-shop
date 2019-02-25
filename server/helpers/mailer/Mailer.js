@@ -73,24 +73,16 @@ class Mailer {
       const discountArray = [];
       response.forEach((item) => {
         priceArray.push(parseFloat(item.Product.price));
-        discountArray.push(parseFloat(item.Product.discountedPrice));
+        discountArray.push(parseFloat(item.Product.discounted_price));
       });
       const totalPrice = priceArray.reduce((prev, curr) => prev + curr);
       const totalDiscount = discountArray.reduce((prev, curr) => prev + curr);
       const finalPrice = totalPrice - totalDiscount;
-      const messageColumn = response.forEach(item => (
-        `<tr>
-        <td>${item.Product.name}</td>
-        <td>${item.quantity}</td>
-        <td>${item.Product.price}</td>
-        </tr>`
-      ));
+
       const subject = 'Order confirmation';
       const message = `
       <p>Dear ${name}, below is the summary of your order excluding shipping charges</p>
-      <table>
-      ${messageColumn}
-      </table>
+
       <p>
       Total Price: ${totalPrice},
       <span>Discount: ${totalDiscount}</span>,

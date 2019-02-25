@@ -16,7 +16,7 @@ class QueryValidation {
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     req.query.page = (page && Number.isInteger(page) && page > 0) ? page : 1;
-    req.query.limit = (limit && Number.isInteger(limit) && limit > 0) ? limit : 10;
+    req.query.limit = (limit && Number.isInteger(limit) && limit > 0) ? limit : 20;
     next();
   }
 }

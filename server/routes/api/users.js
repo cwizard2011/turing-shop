@@ -15,7 +15,7 @@ router.post('/users', UserInputValidation.signUpInputValidation, AuthController.
 router.get('/users', Authenticate.auth, CustomerProfileController.getUserProfile);
 router.post('/users/login', UserInputValidation.loginInputValidation, AuthController.loginCustomer);
 router.put(
-  '/users/:customerId/update',
+  '/users',
   Authenticate.auth,
   UserInputValidation.profileUpdateValidation,
   CustomerProfileController.updateProfile

@@ -2,7 +2,8 @@ import db from '../database/models';
 
 const {
   Customer,
-  ShippingRegion
+  ShippingRegion,
+  Shipping
 } = db;
 
 /**
@@ -18,7 +19,6 @@ class CustomerProfileController {
      * @returns {object} returns user object
      */
   static updateProfile(req, res, next) {
-    const { customerId } = req.params;
     const {
       address1,
       address2,
@@ -31,7 +31,7 @@ class CustomerProfileController {
       mobPhone,
       shippingRegionId,
     } = req.body.user;
-    Customer.findByPk(customerId).then((customer) => {
+    Customer.findByPk(req.decoded.customerId).then((customer) => {
       if (!customer) {
         return res.status(404).json({
           message: 'Customer with this id does not exist'
@@ -74,14 +74,18 @@ class CustomerProfileController {
    * @returns {object} returns user object
    */
   static getUserProfile(req, res, next) {
-    const userId = req.decoded.customerId;
-
-    Customer.findByPk(userId, {
+    Customer.findByPk(req.decoded.customerId, {
+      attributes: {
+        exclude: ['password', 'credit_card']
+      },
       include: [{
         model: ShippingRegion,
         attributes: {
           exclude: ['shipping_region_id']
-        }
+        },
+        include: [{
+          model: Shipping
+        }]
       }]
     }).then(user => res.status(200).json({
       user
