@@ -17,6 +17,9 @@
     "pretest": "cross-env NODE_ENV=test npm run undo:migrations && cross-env NODE_ENV=test npm run migrations && cross-env NODE_ENV=test npm run seeders",
     "heroku-postbuild": "npm run migrations"
   },
+  "engines": {
+    "node": "8.11.4"
+  },
   "keywords": [
     "ecommerce"
   ],
