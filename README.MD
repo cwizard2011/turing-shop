@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/cwizard2011/turing-shop.svg?branch=master)](https://travis-ci.com/cwizard2011/turing-shop)
+[![Coverage Status](https://coveralls.io/repos/github/cwizard2011/turing-shop/badge.svg?branch=master)](https://coveralls.io/github/cwizard2011/turing-shop?branch=master)
 
 # Turing Online Shop Challenge
 Turing Shop- A Sample Ecommerce App that allows users to create an account, add items to cart and make payment.
