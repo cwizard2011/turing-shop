@@ -64,6 +64,7 @@ class ShoppingCartController {
         quantity,
       }).then(cart => res.status(201).json({
         cart,
+        totalItems: quantity,
         message: 'Item added to cart successfully'
       })).catch(next);
     }).catch(next);
@@ -93,12 +94,40 @@ class ShoppingCartController {
     })
       .then((items) => {
         if (!items) {
-          return res.status(404).json({
-            message: 'No item in the cart at the moment'
+          return res.status(200).json({
+            message: 'No item in the cart at the moment',
+            totalItems: 0
+          });
+        }
+        const quantityArray = [];
+        const totalArray = [];
+        const discountArray = [];
+
+        items.rows.map((item) => {
+          const price = parseFloat(item.quantity * item.Product.price);
+          const discount = parseFloat(item.Product.discounted_price);
+          totalArray.push(price);
+          discountArray.push(discount);
+          quantityArray.push(item.quantity);
+          return null;
+        });
+        if (quantityArray.length > 0) {
+          const totalItems = quantityArray.reduce((preValue, nextValue) => (
+            preValue + nextValue));
+          const subTotal = totalArray.reduce((prev, curr) => prev + curr);
+          const totalDiscount = discountArray.reduce((prev, curr) => prev + curr);
+          const finalPrice = subTotal - totalDiscount;
+          return res.status(200).json({
+            totalItems,
+            subTotal,
+            totalDiscount,
+            finalPrice,
+            items,
           });
         }
         return res.status(200).json({
-          items
+          message: 'No item in the cart at the moment',
+          totalItems: 0
         });
       }).catch(next);
   }
@@ -134,7 +163,8 @@ class ShoppingCartController {
       return res.status(200).json({
         updatedItem: {
           item
-        }
+        },
+        totalItems: item.quantity
       });
     }).catch(next);
   }

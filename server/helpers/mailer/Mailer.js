@@ -65,7 +65,6 @@ class Mailer {
         name,
         email,
         city,
-        region,
         country
       } = response[0].Customer;
       const address1 = response[0].Customer.address_1;
@@ -73,16 +72,19 @@ class Mailer {
       const priceArray = [];
       const discountArray = [];
       response.forEach((item) => {
-        priceArray.push(parseFloat(item.Product.price));
+        priceArray.push(parseFloat(item.Product.price * item.quantity));
         discountArray.push(parseFloat(item.Product.discounted_price));
       });
       const orderTableColumn = response.reduce((a, b) => `${a}<tr>
       <td style="border: 1px solid #ddd; padding: 8px;">${b.Product.name}</a></td>
       <td style="border: 1px solid #ddd; padding: 8px;">${b.quantity}</td>
-      <td style="border: 1px solid #ddd; padding: 8px;">€ ${b.Product.price}</td></tr>`, '');
+      <td style="border: 1px solid #ddd; padding: 8px;">$ 
+      ${Math.round((b.Product.price * b.quantity * 100) / 100).toFixed(2)}</td></tr>`, '');
       const totalPrice = priceArray.reduce((prev, curr) => prev + curr);
       const totalDiscount = discountArray.reduce((prev, curr) => prev + curr);
-      const finalPrice = Math.round(((totalPrice - totalDiscount) + shippingCost) * 100) / 100;
+      const finalPrice = Math.round(
+        (((totalPrice - totalDiscount) + shippingCost) * 100) / 100
+      ).toFixed(2);
 
       const subject = 'Order confirmation';
       const message = `
@@ -97,11 +99,11 @@ class Mailer {
       </table>
       <p><b>Shipping:</b> ${shippingType} <span><b>Cost:</b> $ ${shippingCost}</span></p>
       <p>
-      <b>Item Total:</b> ${totalPrice},
-      <span><b>Discount:</b> ${totalDiscount}</span>,
-      <span><b>Final Charge:</b> ${finalPrice}</span>
+      <b>Item Total:</b>$ ${Math.round((totalPrice * 100) / 100).toFixed(2)},
+      <span><b>Discount:</b>$ ${Math.round((totalDiscount * 100) / 100).toFixed(2)}</span>,
+      <span><b>Final Charge:</b>$ ${finalPrice}</span>
       </p>
-      <p><b>Shipping Address:</b> ${address1}, ${city}, ${region}, ${country}, ${postalCode}</p>
+      <p><b>Shipping Address:</b> ${address1}, ${city}, ${country}, ${postalCode}</p>
       `;
       Mailer.emailSender(email, subject, message);
     });

@@ -22,7 +22,7 @@ class AuthController {
    */
   static createCustomer(req, res, next) {
     const {
-      firstname, lastname, password
+      fullname, password
     } = req.body.user;
     let { email } = req.body.user;
     email = email.toLowerCase();
@@ -39,7 +39,7 @@ class AuthController {
       }
       const hashedPassword = bcrypt.hashSync(password, salt);
       Customer.create({
-        name: `${firstname} ${lastname}`,
+        name: fullname,
         email,
         password: hashedPassword,
       })

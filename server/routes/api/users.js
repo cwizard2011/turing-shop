@@ -7,7 +7,7 @@ import CustomerProfileController from '../../controller/CustomerProfileControlle
 const router = express.Router();
 
 router.get('/', (req, res) => res.status(404).json({
-  message: 'Welcome to Turing E-commerce web app'
+  message: 'Welcome to Shopmate'
 }));
 
 // Auth endpoints
@@ -17,7 +17,6 @@ router.post('/users/login', UserInputValidation.loginInputValidation, AuthContro
 router.put(
   '/users',
   Authenticate.auth,
-  UserInputValidation.profileUpdateValidation,
   CustomerProfileController.updateProfile
 );
 

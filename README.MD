@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.com/cwizard2011/turing-shop.svg?branch=master)](https://travis-ci.com/cwizard2011/turing-shop)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0a7595b1e226bc11f25d/maintainability)](https://codeclimate.com/github/cwizard2011/turing-shop/maintainability)
 
-# Turing Online Shop Challenge
-Turing Shop- A Sample Ecommerce App that allows users to create an account, add items to cart and make payment.
+# Shopmate
+Shopmate- A Sample Ecommerce App that allows users to create an account, add items to cart and make payment.
 
 # Development
 The development is broken down into two parts, the server side and the client side. The server side (API/backend) is developed using Express, NodeJs, MySQL and Sequelize ORM for persisting data, and Json Web token for authentication. React framework is used for the frontend
@@ -58,7 +58,7 @@ Example request body:
 
 No authentication required, returns a User
 
-Required fields: `firstname`, `lastname`,  `email`, `password`
+Required fields: `fullname`,  `email`, `password`
 
 ### Get All Items
 
@@ -70,17 +70,17 @@ Filter by Department:
 
 `?department=Nature`
 
-Filter by Category:
+Filter by Department and Category:
 
-`?category=french`
+`?department=Regional&category=french`
+
+Filter by page and limit(default page=1 and limit=10):
+
+`?page=1&limit=5`
 
 Search by name of item or item description:
 
 `?search=Arc`
-
-Limit number of items (default is 20):
-
-`?limit=20`
 
 
 No authentication required, returns a default of ten items per page
@@ -166,6 +166,12 @@ Authentication required, returns an updated user object
 `GET /api/users`
 
 Authentication required, returns a user object
+
+### Get all departments and categories
+
+`GET /api/department`
+
+No authentication required, returns the the department object
 
 
 ## Running Test

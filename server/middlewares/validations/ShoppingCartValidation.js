@@ -22,6 +22,7 @@ class ShoppingCartValidation {
     const {
       productId,
       attributes,
+      quantity,
     } = req.body.cart;
     const attributesToString = attributes.toString();
     ShoppingCart.find({
@@ -33,9 +34,16 @@ class ShoppingCartValidation {
       }
     }).then((item) => {
       if (item) {
-        return res.status(400).json({
-          message: `This item has already been added to the cart,
-              go to cart and update the quantity`
+        const newQuantity = item.quantity + quantity;
+        item.update({
+          quantity: newQuantity
+        });
+        return res.status(200).json({
+          updatedItem: {
+            item
+          },
+          totalItems: quantity,
+          message: 'Item successfully added to cart'
         });
       }
       return next();

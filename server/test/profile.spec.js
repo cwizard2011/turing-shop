@@ -49,25 +49,4 @@ describe('Edit user profile', () => {
         done();
       });
   });
-  it('should not update a users profile with invalid postal code', (done) => {
-    chai.request(app)
-      .put('/api/users')
-      .set('Authorization', userToken)
-      .send({
-        user: {
-          address1: '235 Ikorodu road, Ilupeju',
-          city: 'Ilupeju',
-          region: 'Lagos',
-          country: 'Nigeria',
-          postalCode: '234'
-        }
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body.errors.postalCode[0]).to.equal(
-          'The postalCode must be at least 5 characters.'
-        );
-        done();
-      });
-  });
 });

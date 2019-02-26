@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import db from '../database/models';
 
 const {
@@ -10,7 +10,7 @@ const {
 
 /**
  * @class ProductsController
- * @description - Class for creating and retrieving items in the database
+ * @description - Class for retrieving items in the database
  */
 class ProductController {
   /**
@@ -24,11 +24,13 @@ class ProductController {
      */
   static getAllItems(req, res, next) {
     const {
-      page, limit, department, category, search
+      department, page, limit, category, searchTerm
     } = req.query;
+
     const offset = parseInt((page - 1), 10) * limit;
 
     const queryBuilder = {
+      distinct: true,
       attributes:
         {
           exclude: ['createdAt', 'updatedAt']
@@ -44,63 +46,64 @@ class ProductController {
     };
 
     if (department) {
-      Department.findAll({
-        include: [{
-          model: Category,
-          include: [{
-            model: Product,
-            attributes: {
-              exclude: ['createdAt', 'updatedAt']
-            }
-          }]
-        }]
-      }).then(products => res.status(200).json({
-        paginationMeta: {
-          currentPage: page,
-          pageSize: limit,
-          resultCount: products.rows.length,
-        },
-        items: products.rows
-      })).catch(next);
-    }
-    if (category) {
-      queryBuilder.include = {
+      queryBuilder.include[1] = {
         model: Category,
+        include: [{
+          model: Department,
+          where: {
+            name: {
+              [Op.like]: `%${req.query.department}%`
+            }
+          }
+        }]
+      };
+    }
+
+    if (department && category) {
+      queryBuilder.include[1] = {
+        model: Category,
+        required: true,
         where: {
           name: {
             [Op.like]: `%${req.query.category}%`
           }
-        }
+        },
+        include: [{
+          model: Department,
+        }]
       };
     }
 
-    if (search) {
+    if (searchTerm) {
       queryBuilder.where = {
         $or: [{
           name: {
-            [Op.like]: `%${req.query.search}%`
+            [Op.like]: `%${req.query.searchTerm}%`
           }
         }, {
           description: {
-            [Op.like]: `%${req.query.search}%`
+            [Op.like]: `%${req.query.searchTerm}%`
           }
         }]
       };
     }
 
-
     Product.findAndCountAll(queryBuilder)
       .then((products) => {
-        if (!products) {
+        if (products.rows.length < 1) {
           return res.status(404).json({
-            message: 'No items at the moment'
+            message: 'No items at the moment in this department and category'
           });
         }
+        const { count } = products;
+        const pageCount = Math.ceil(count / limit);
         return res.status(200).json({
           paginationMeta: {
             currentPage: page,
             pageSize: limit,
+            totalCount: count,
             resultCount: products.rows.length,
+            pageCount,
           },
           items: products.rows
         });
@@ -124,11 +127,6 @@ class ProductController {
           exclude: ['createdAt', 'updatedAt']
         },
       include: [{
-        model: Category,
-        attributes: {
-          exclude: ['createdAt', 'updatedAt']
-        }
-      }, {
         model: AttributeValue,
         attributes: {
           exclude: ['createdAt', 'updatedAt']
@@ -143,6 +141,65 @@ class ProductController {
       }
       return res.status(200).json({
         product
+      });
+    }).catch(next);
+  }
+
+  /**
+   *
+   * @param {object} req request object
+   * @param {object} res response object
+   * @param {*} next
+   *
+   * @returns {object} item object
+   */
+  static getAllDepartments(req, res, next) {
+    Department.findAll({
+      attributes: ['id', 'name', 'description'],
+      include: [{
+        model: Category,
+        attributes: ['id', 'name', 'description'],
+        include: [{
+          model: Product,
+          attributes: ['id', 'name', 'image', 'price', 'discounted_price']
+        }]
+      }
+      ]
+    }).then((departments) => {
+      if (!departments) {
+        return res.status(404).json({
+          message: 'Admin has not create any department'
+        });
+      }
+      return res.status(200).json({
+        departments
+      });
+    }).catch(next);
+  }
+
+  /**
+   *
+   * @param {object} req request object
+   * @param {object} res response object
+   * @param {*} next
+   *
+   * @returns {object} item object
+   */
+  static getFeaturedProduct(req, res, next) {
+    Product.findAll({
+      attributes: ['id', 'name', 'description', 'price', 'discounted_price', 'image'],
+      order: [
+        [Sequelize.literal('RAND()')]
+      ],
+      limit: 6
+    }).then((featuredItem) => {
+      if (!featuredItem) {
+        return res.status(404).json({
+          message: 'No item at the moment'
+        });
+      }
+      return res.status(200).json({
+        featuredItem
       });
     }).catch(next);
   }

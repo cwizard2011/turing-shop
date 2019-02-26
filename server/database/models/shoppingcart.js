@@ -24,10 +24,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   ShoppingCart.associate = (models) => {
     ShoppingCart.belongsTo(models.Product, {
-      foreignKey: 'product_id'
+      foreignKey: 'product_id',
+      onDelete: 'CASCADE'
     });
     ShoppingCart.belongsTo(models.Customer, {
-      foreignKey: 'customer_id'
+      foreignKey: 'customer_id',
+      onDelete: 'CASCADE'
     });
   };
   return ShoppingCart;

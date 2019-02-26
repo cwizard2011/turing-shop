@@ -11,4 +11,10 @@ router.post(
   CheckoutController.checkout
 );
 
+router.get(
+  '/region',
+  Authenticate.auth,
+  CheckoutController.getShippingRegion
+);
+
 export default router;

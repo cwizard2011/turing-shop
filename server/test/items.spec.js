@@ -12,7 +12,6 @@ describe('Get all items', () => {
       .set('Content-Type', 'application/json')
       .end((err, res) => {
         expect(res.status).to.equal(200);
-        expect(res.body).to.have.property('paginationMeta');
         expect(res.body.items).to.be.an('array');
         if (err) return done(err);
         done();
@@ -29,15 +28,25 @@ describe('Get all items', () => {
         done();
       });
   });
-  it('It should return item by categories', (done) => {
+  it('It should return item by department', (done) => {
     chai.request(app)
-      .get('/api/items?category=french')
+      .get('/api/items?department=regional')
       .set('Content-Type', 'application/json')
       .end((err, res) => {
         expect(res.status).to.equal(200);
-        expect(res.body).to.have.property('paginationMeta');
-        expect(res.body.paginationMeta.resultCount).to.equal(1);
         expect(res.body.items).to.be.an('array');
+        if (err) return done(err);
+        done();
+      });
+  });
+  it('It should return item by department and category', (done) => {
+    chai.request(app)
+      .get('/api/items?department=regional&category=french')
+      .set('Content-Type', 'application/json')
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.items).to.be.an('array');
+        expect(res.body.items[0].Categories).to.be.an('array');
         if (err) return done(err);
         done();
       });
@@ -48,22 +57,6 @@ describe('Get all items', () => {
       .set('Content-Type', 'application/json')
       .end((err, res) => {
         expect(res.status).to.equal(200);
-        expect(res.body).to.have.property('paginationMeta');
-        expect(res.body.paginationMeta.resultCount).to.equal(1);
-        expect(res.body.items).to.be.an('array');
-        if (err) return done(err);
-        done();
-      });
-  });
-  it('It should filter by page number and limit', (done) => {
-    chai.request(app)
-      .get('/api/items?page=1&limit=3')
-      .set('Content-Type', 'application/json')
-      .end((err, res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body).to.have.property('paginationMeta');
-        expect(res.body.paginationMeta.currentPage).to.equal(1);
-        expect(res.body.paginationMeta.pageSize).to.equal(3);
         expect(res.body.items).to.be.an('array');
         if (err) return done(err);
         done();
