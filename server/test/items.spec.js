@@ -29,19 +29,6 @@ describe('Get all items', () => {
         done();
       });
   });
-  it('It should return item by department', (done) => {
-    chai.request(app)
-      .get('/api/items?department=Nature')
-      .set('Content-Type', 'application/json')
-      .end((err, res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body).to.have.property('paginationMeta');
-        expect(res.body.paginationMeta.resultCount).to.equal(3);
-        expect(res.body.items).to.be.an('array');
-        if (err) return done(err);
-        done();
-      });
-  });
   it('It should return item by categories', (done) => {
     chai.request(app)
       .get('/api/items?category=french')

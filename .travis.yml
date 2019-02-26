@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - "9"
+
+services:
+  - mysql
+
+before_install:
+  - npm install -g npm@latest
+
+before_script:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+
+script:
+  - npm test
+
+after_success: npm run coveralls
