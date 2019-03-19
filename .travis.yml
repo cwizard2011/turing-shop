@@ -4,6 +4,7 @@ node_js:
 
 services:
   - mysql
+  - redis-server
 
 before_install:
   - npm install -g npm@latest
