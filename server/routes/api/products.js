@@ -10,8 +10,8 @@ router.get('/items',
   QueryValidation.queryValidation,
   redisMiddleware,
   ProductController.getAllItems);
-router.get('/items/:id', redisMiddleware, ProductController.getSingleItem);
-router.get('/department', redisMiddleware, ProductController.getAllDepartments);
+router.get('/items/:id', ProductController.getSingleItem);
+router.get('/department', ProductController.getAllDepartments);
 router.get('/featured', ProductController.getFeaturedProduct);
 
 export default router;
