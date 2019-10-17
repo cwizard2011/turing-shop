@@ -1,5 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const ShoppingCart = sequelize.define('ShoppingCart', {
+    item_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     product_id: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -8,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    attribute: {
+    attributes: {
       type: DataTypes.STRING(1000),
       allowNull: false
     },
@@ -21,7 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: true
     },
-  }, {});
+  }, {
+    timestamps: false,
+    tableName: 'shopping_cart'
+  });
   ShoppingCart.associate = (models) => {
     ShoppingCart.belongsTo(models.Product, {
       foreignKey: 'product_id',

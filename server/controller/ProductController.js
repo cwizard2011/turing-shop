@@ -22,7 +22,7 @@ class ProductController {
      *
      *  @returns {object} returns all items object
      */
-  static getAllItems(req, res, next) {
+  static getAllProducts(req, res, next) {
     const {
       department, page, limit, category, searchTerm
     } = req.query;
@@ -31,15 +31,8 @@ class ProductController {
 
     const queryBuilder = {
       distinct: true,
-      attributes:
-        {
-          exclude: ['createdAt', 'updatedAt']
-        },
       include: [{
         model: AttributeValue,
-        attributes: {
-          exclude: ['createdAt', 'updatedAt']
-        }
       }],
       offset,
       limit
@@ -76,7 +69,7 @@ class ProductController {
 
     if (searchTerm) {
       queryBuilder.where = {
-        $or: [{
+        [Op.or]: [{
           name: {
             [Op.like]: `%${req.query.searchTerm}%`
           }
@@ -119,9 +112,9 @@ class ProductController {
    *
    * @returns {object} item object
    */
-  static getSingleItem(req, res, next) {
-    const { id } = req.params;
-    Product.findByPk(id, {
+  static getSingleProduct(req, res, next) {
+    const { product_id } = req.params;
+    Product.findByPk(product_id, {
       attributes:
         {
           exclude: ['createdAt', 'updatedAt']
@@ -155,13 +148,13 @@ class ProductController {
    */
   static getAllDepartments(req, res, next) {
     Department.findAll({
-      attributes: ['id', 'name', 'description'],
+      attributes: ['department_id', 'name', 'description'],
       include: [{
         model: Category,
-        attributes: ['id', 'name', 'description'],
+        attributes: ['category_id', 'name', 'description'],
         include: [{
           model: Product,
-          attributes: ['id', 'name', 'image', 'price', 'discounted_price']
+          attributes: ['product_id', 'name', 'image', 'price', 'discounted_price']
         }]
       }
       ]
@@ -187,7 +180,7 @@ class ProductController {
    */
   static getFeaturedProduct(req, res, next) {
     Product.findAll({
-      attributes: ['id', 'name', 'description', 'price', 'discounted_price', 'image'],
+      attributes: ['product_id', 'name', 'description', 'price', 'discounted_price', 'image'],
       order: [
         [Sequelize.literal('RAND()')]
       ],

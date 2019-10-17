@@ -1,5 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const Product = sequelize.define('Product', {
+    product_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     name: {
       type: DataTypes.STRING(100),
       allowNull: false,
@@ -25,7 +30,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0.00
     }
-  }, {});
+  }, {
+    timestamps: false,
+    tableName: 'product'
+  });
 
   Product.associate = (models) => {
     Product.belongsToMany(models.Category, {

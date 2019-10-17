@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     }
-  }, {});
+  }, {
+    timestamps: false,
+    tableName: 'product_category'
+  });
   ProductCategory.associate = (models) => {
     ProductCategory.belongsTo(models.Product, {
       foreignKey: 'product_id'

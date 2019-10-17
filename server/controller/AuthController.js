@@ -46,9 +46,8 @@ class AuthController {
         .then((customer) => {
           const token = jwt.sign(
             {
-              customerId: customer.id,
+              customerId: customer.customer_id,
               email: customer.email,
-              role: customer.role,
             }, secret, { expiresIn: '24h' }
           );
           res.status(201).json({
@@ -79,9 +78,8 @@ class AuthController {
       if (customer) {
         if (bcrypt.compareSync(password, customer.password)) {
           const token = jwt.sign({
-            customerId: customer.id,
+            customerId: customer.customer_id,
             email: customer.email,
-            role: customer.role,
           }, secret, { expiresIn: '24h' });
           return res.status(200).json({
             message: 'Congratulations, you are now logged in.',

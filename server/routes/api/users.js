@@ -7,15 +7,15 @@ import CustomerProfileController from '../../controller/CustomerProfileControlle
 const router = express.Router();
 
 router.get('/', (req, res) => res.status(404).json({
-  message: 'Welcome to Shopmate'
+  message: 'Welcome to Shopmate API'
 }));
 
 // Auth endpoints
-router.post('/users', UserInputValidation.signUpInputValidation, AuthController.createCustomer);
-router.get('/users', Authenticate.auth, CustomerProfileController.getUserProfile);
-router.post('/users/login', UserInputValidation.loginInputValidation, AuthController.loginCustomer);
+router.post('/customers', UserInputValidation.signUpInputValidation, AuthController.createCustomer);
+router.get('/customer', Authenticate.auth, CustomerProfileController.getUserProfile);
+router.post('/customer/login', UserInputValidation.loginInputValidation, AuthController.loginCustomer);
 router.put(
-  '/users',
+  '/customer',
   Authenticate.auth,
   CustomerProfileController.updateProfile
 );

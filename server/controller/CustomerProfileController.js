@@ -37,7 +37,7 @@ class CustomerProfileController {
           message: 'Customer with this id does not exist'
         });
       }
-      if (customer.id !== req.decoded.customerId) {
+      if (customer.customer_id !== req.decoded.customerId) {
         return res.status(403).json({
           message: 'Access Denied! You can\'t edit another user\'s profile'
         });

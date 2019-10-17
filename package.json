@@ -1,21 +1,13 @@
 {
   "name": "turing-ecommerce-project",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "REST API for turing ecommerce website",
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node ./dist/index.js",
     "dev": "nodemon index.js --exec babel-node",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "clean:build": "rimraf dist/",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha --require babel-core/register server/test/**/*.spec.js --exit && nyc report --timeout 10000",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "undo:migrations": "node_modules/.bin/sequelize db:migrate:undo:all",
-    "migrations": "node_modules/.bin/sequelize db:migrate",
-    "undo:seeders": "node_modules/.bin/sequelize db:seed:undo:all",
-    "seeders": "babel-node node_modules/.bin/sequelize db:seed:all",
-    "pretest": "cross-env NODE_ENV=test npm run undo:migrations && cross-env NODE_ENV=test npm run migrations && cross-env NODE_ENV=test npm run seeders",
-    "heroku-postbuild": "npm run migrations"
+    "clean:build": "rimraf dist/"
   },
   "engines": {
     "node": "8.11.4"
@@ -28,8 +20,6 @@
   "dependencies": {
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
-    "chai": "^4.2.0",
-    "chai-http": "^4.2.1",
     "cors": "^2.8.5",
     "cross-env": "^5.2.0",
     "dotenv": "^6.2.0",
@@ -47,7 +37,7 @@
     "redis": "^2.8.0",
     "request": "^2.88.0",
     "rimraf": "^2.6.3",
-    "sequelize": "^4.42.0",
+    "sequelize": "^5.19.8",
     "sequelize-cli": "^5.4.0",
     "stripe": "^6.25.1",
     "validatorjs": "^3.15.1"
@@ -63,9 +53,6 @@
     "eslint": "^5.14.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
-    "mocha": "^6.0.0",
-    "mocha-lcov-reporter": "^1.3.0",
-    "nodemon": "^1.18.10",
-    "nyc": "^13.3.0"
+    "nodemon": "^1.18.10"
   }
 }

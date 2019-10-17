@@ -5,10 +5,10 @@ import QueryValidation from '../../middlewares/validations/QueryValidation';
 const router = express.Router();
 
 // Items endpoints
-router.get('/items',
+router.get('/products',
   QueryValidation.queryValidation,
-  ProductController.getAllItems);
-router.get('/items/:id', ProductController.getSingleItem);
+  ProductController.getAllProducts);
+router.get('/product/:product_id', ProductController.getSingleProduct);
 router.get('/department', ProductController.getAllDepartments);
 router.get('/featured', ProductController.getFeaturedProduct);
 

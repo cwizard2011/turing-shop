@@ -1,5 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const Customer = sequelize.define('Customer', {
+    customer_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     name: {
       type: DataTypes.STRING(50),
       allowNull: false
@@ -31,14 +36,10 @@ module.exports = (sequelize, DataTypes) => {
     day_phone: DataTypes.STRING(100),
     eve_phone: DataTypes.STRING(100),
     mob_phone: DataTypes.STRING(100),
-    role: {
-      type: DataTypes.STRING,
-      isIn: {
-        args: [['user', 'admin']],
-        message: 'User role can only be user, admin or super admin',
-      },
-      defaultValue: 'user',
-    },
+  }, 
+  {
+    timestamps: false,
+    tableName: 'customer',
   });
 
   Customer.prototype.toAuthJSON = function () {

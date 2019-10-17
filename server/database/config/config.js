@@ -4,11 +4,18 @@ dotenv.config();
 
 const config = {
   development: {
-    use_env_variable: 'DEV_DATABASE_URL',
-    dialect: 'mysql'
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    dialect: 'mysql',
+    logging: false
   },
   test: {
-    use_env_variable: 'TEST_DATABASE_URL',
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
     dialect: 'mysql',
     logging: false
   },

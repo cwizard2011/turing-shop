@@ -48,13 +48,12 @@ class Authenticate {
           message: 'You do not have permission to this page.'
         });
       }
-      Customer.findById(decoded.customerId)
+      Customer.findByPk(decoded.customerId)
         .then((user) => {
           if (user) {
             req.decoded = {
               ...user.toAuthJSON(),
               customerId: decoded.customerId,
-              role: decoded.role,
             };
             return next();
           }

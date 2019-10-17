@@ -54,13 +54,13 @@ class CheckoutController {
       .then(customer => stripePayment.charges.create({
         amount: finalPrice,
         currency: 'usd',
-        customer: customer.id
+        customer: customer.customer_id
       }))
       .then((payment) => {
         Mailer.sendOrderConfirmation(customerId, shippingCost, shippingType);
         Customer.findOne({
           where: {
-            id: customerId
+            customer_id: customerId
           }
         })
           .then((user) => {
@@ -68,7 +68,7 @@ class CheckoutController {
               total_amount: finalPrice / 100,
               status: 1,
               comments: description,
-              customer_id: user.id,
+              customer_id: user.customer_id,
               auth_code: req.body.stripeToken || null,
               reference: payment.balance_transaction,
               shipping_id: shippingId,
