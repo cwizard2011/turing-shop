@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import db from '../database/models';
 
 
@@ -31,7 +32,7 @@ class ShoppingCartController {
     attributes.forEach(value => AttributeValue.findOne({
       where: {
         value: {
-          $eq: value
+          [Op.eq]: value
         }
       }
     }).then((attributeValue) => {
@@ -42,13 +43,13 @@ class ShoppingCartController {
       }
       attributeArray.push(attributeValue.dataValues.value);
     }));
-    Product.find({
+    Product.findOne({
       attributes:
           {
             exclude: ['createdAt', 'updatedAt']
           },
       where: {
-        id: productId
+        product_id: productId
       }
     }).then((item) => {
       if (!item) {
@@ -60,7 +61,7 @@ class ShoppingCartController {
       ShoppingCart.create({
         product_id: productId,
         customer_id: req.decoded.customerId,
-        attribute: attributeString,
+        attributes: attributeString,
         quantity,
       }).then(cart => res.status(201).json({
         cart,
@@ -148,7 +149,7 @@ class ShoppingCartController {
 
     ShoppingCart.findOne({
       where: {
-        id: cartId,
+        item_id: cartId,
         customer_id: req.decoded.customerId
       }
     }).then((item) => {
@@ -182,7 +183,7 @@ class ShoppingCartController {
 
     ShoppingCart.findOne({
       where: {
-        id: cartId,
+        item_id: cartId,
         customer_id: req.decoded.customerId,
       }
     }).then((item) => {

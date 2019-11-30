@@ -54,15 +54,11 @@ class CheckoutController {
       .then(customer => stripePayment.charges.create({
         amount: finalPrice,
         currency: 'usd',
-        customer: customer.customer_id
+        customer: customer.id
       }))
       .then((payment) => {
         Mailer.sendOrderConfirmation(customerId, shippingCost, shippingType);
-        Customer.findOne({
-          where: {
-            customer_id: customerId
-          }
-        })
+        Customer.findByPk(customerId)
           .then((user) => {
             Order.create({
               total_amount: finalPrice / 100,
@@ -72,7 +68,7 @@ class CheckoutController {
               auth_code: req.body.stripeToken || null,
               reference: payment.balance_transaction,
               shipping_id: shippingId,
-            });
+            })
           })
           .then(() => {
             CheckoutController.clearShoppingCart(req, res, next);
@@ -165,9 +161,6 @@ class CheckoutController {
    */
   static getShippingRegion(req, res, next) {
     ShippingRegion.findAndCountAll({
-      attributes: {
-        exclude: ['shipping_region_id']
-      },
       include: [{
         model: Shipping,
       }]

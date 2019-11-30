@@ -25,10 +25,10 @@ class ShoppingCartValidation {
       quantity,
     } = req.body.cart;
     const attributesToString = attributes.toString();
-    ShoppingCart.find({
+    ShoppingCart.findOne({
       where: {
         product_id: productId,
-        attribute: {
+        attributes: {
           [Op.like]: `%${attributesToString}%`
         }
       }
